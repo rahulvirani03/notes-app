@@ -129,6 +129,18 @@ const Note = () => {
   }, [toast]);
 
   const goBack = async () => {
+    if (
+      state.title === "" ||
+      state.tagline === "" ||
+      state.description === ""
+    ) {
+      setToastMessage("Please fill all Fielfs");
+      setToast({
+        type: "Error",
+        active: true,
+      });
+      return;
+    }
     const check = _.isEqual(state, data);
     if (check) {
       navigate("/");
@@ -142,20 +154,7 @@ const Note = () => {
   };
 
   const handleUpdate = useCallback(async () => {
-    if (
-      state.title === "" ||
-      state.tagline === "" ||
-      state.description === ""
-    ) {
-      setToastMessage("Please fill all Fielfs");
-      setToast({
-        type: "Error",
-        active: true,
-      });
-      return;
-    }
     const res = await updateNote(state);
-
     return res;
   }, [state]);
 
