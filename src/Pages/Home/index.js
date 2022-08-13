@@ -53,15 +53,21 @@ const Title = styled.div`
   height: 100%;
   display: flex;
   align-items: center;
-  margin: auto 2em;
+  margin: auto 1em;
   font-size: x-large;
   gap: 10px;
   text-transform: capitalize;
   color: white;
+  @media screen and (max-width: 600px) {
+    margin: 0 0.4em;
+    p {
+      display: none;
+    }
+  }
 `;
 const SearchContainer = styled.div`
   padding: 0.7em;
-  margin: auto 2em;
+  margin: auto 1em;
   background-color: ${colors.white};
   border-radius: ${styles.borderRadius};
   display: grid;
@@ -82,6 +88,11 @@ const SearchContainer = styled.div`
       cursor: pointer;
     }
   }
+  @media screen and (max-width: 600px) {
+    width: 70%;
+    margin-right: 0.4em;
+    margin-left: auto;
+  }
 `;
 const NoteContainerWrapper = styled.div`
   display: flex;
@@ -89,9 +100,9 @@ const NoteContainerWrapper = styled.div`
   flex-direction: column;
   width: 95%;
   margin: 0 auto;
-  min-height: 80vh;
-  border: 1px solid ${colors.greyLight};
 
+  min-height: 80vh;
+  border: 1px solid ${colors.grey};
   border-radius: ${styles.borderRadius};
   gap: 10px;
   padding-top: 1em;
@@ -102,7 +113,7 @@ const NoteContainerWrapper = styled.div`
   }
 `;
 const NoteContianer = styled.div`
-  padding-bottom: 2em;
+  padding-bottom: 1em;
   gap: 20px;
   margin-top: 1em;
   display: grid;
@@ -118,10 +129,9 @@ const Note = styled.div`
   position: relative;
   margin: 0 1em;
   padding: 0.5em 1em;
-
   box-shadow: ${styles.boxShadow};
   border-radius: ${styles.borderRadius};
-  border: 1px solid black;
+  border: 1px solid ${colors.grey};
   .title {
     width: 90%;
     font-size: medium;
@@ -188,7 +198,7 @@ const Home = () => {
       <HeaderContianer>
         <Title>
           <Clipboard />
-          WebKeep
+          <p> WebKeep</p>
         </Title>
         <SearchContainer>
           <Search />
@@ -221,6 +231,78 @@ const Home = () => {
               <NoNoteTag>No notes.</NoNoteTag>
             ) : (
               <NoteContianer>
+                {currentPageNotes
+                  .filter(
+                    (note) =>
+                      note.title
+                        .toLowerCase()
+                        .includes(searchText.toLowerCase()) ||
+                      note.description
+                        .toLowerCase()
+                        .includes(searchText.toLowerCase()) ||
+                      note.tagline
+                        .toLowerCase()
+                        .includes(searchText.toLowerCase())
+                  )
+                  .map((note) => {
+                    return (
+                      <Link
+                        key={note.id}
+                        style={{ textDecoration: "none" }}
+                        to={`/note/${note.id}`}
+                        state={note}
+                      >
+                        <Note>
+                          {note.isPinned && (
+                            <Bookmark
+                              className="pinned"
+                              fill={colors.primary}
+                              stroke={colors.primary}
+                            />
+                          )}
+
+                          <p className="title">{note.title}</p>
+                          <p className="tagline">{note.tagline}</p>
+                        </Note>
+                      </Link>
+                    );
+                  })}
+                {currentPageNotes
+                  .filter(
+                    (note) =>
+                      note.title
+                        .toLowerCase()
+                        .includes(searchText.toLowerCase()) ||
+                      note.description
+                        .toLowerCase()
+                        .includes(searchText.toLowerCase()) ||
+                      note.tagline
+                        .toLowerCase()
+                        .includes(searchText.toLowerCase())
+                  )
+                  .map((note) => {
+                    return (
+                      <Link
+                        key={note.id}
+                        style={{ textDecoration: "none" }}
+                        to={`/note/${note.id}`}
+                        state={note}
+                      >
+                        <Note>
+                          {note.isPinned && (
+                            <Bookmark
+                              className="pinned"
+                              fill={colors.primary}
+                              stroke={colors.primary}
+                            />
+                          )}
+
+                          <p className="title">{note.title}</p>
+                          <p className="tagline">{note.tagline}</p>
+                        </Note>
+                      </Link>
+                    );
+                  })}
                 {currentPageNotes
                   .filter(
                     (note) =>

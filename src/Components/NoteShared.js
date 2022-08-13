@@ -8,6 +8,9 @@ export const Wrapper = styled.div`
   position: relative;
   justify-content: center;
   align-items: center;
+  svg {
+    cursor: pointer;
+  }
 `;
 
 export const Container = styled.div`
