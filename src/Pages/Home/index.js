@@ -1,18 +1,18 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { colors, styles } from "../../Utils/theme";
-import { Bookmark, PlusCircle, Search } from "react-feather";
+import { Bookmark, Clipboard, PlusCircle, Search } from "react-feather";
 import { Link } from "react-router-dom";
 import { getAllLDocs } from "../../Utils/dbUtlility";
 import Pagination from "./Pagination";
 import Loader from "../../Components/Loader";
+
 const HomeContainer = styled.div`
-  width: 95%;
+  width: 100%;
   margin: 0 auto;
   display: grid;
   grid-template-rows: fit-content 90%;
   gap: 10px;
-  padding: 2em 0;
   @media screen and (max-width: 600px) {
     gap: 2px;
   }
@@ -36,11 +36,33 @@ const PaginationContainer = styled.div`
   margin-bottom: 0px;
   margin-top: auto;
 `;
-const SearcContainer = styled.div`
-  height: 2.5em;
-  padding: 0.5em;
-  background: ${colors.white};
-  border: 1px solid ${colors.grey};
+const HeaderContianer = styled.div`
+  height: 5em;
+  background-color: ${colors.primary};
+  width: 100%;
+  margin: auto;
+  display: grid;
+  grid-template-columns: 30% 65%;
+  place-content: center;
+  gap: 10px;
+  align-items: center;
+  justify-content: center;
+`;
+
+const Title = styled.div`
+  height: 100%;
+  display: flex;
+  align-items: center;
+  margin: auto 2em;
+  font-size: x-large;
+  gap: 10px;
+  text-transform: capitalize;
+  color: white;
+`;
+const SearchContainer = styled.div`
+  padding: 0.7em;
+  margin: auto 2em;
+  background-color: ${colors.white};
   border-radius: ${styles.borderRadius};
   display: grid;
   grid-template-columns: 40px 1fr;
@@ -49,8 +71,9 @@ const SearcContainer = styled.div`
     width: 100%;
     height: 100%;
     border: none;
+    color: black;
     padding: 0.2em 0.5em;
-    font-weight: 400;
+    background-color: inherit;
     font-size: medium;
     :focus {
       outline: none;
@@ -64,10 +87,11 @@ const NoteContainerWrapper = styled.div`
   display: flex;
   background: ${colors.white};
   flex-direction: column;
-  width: 100%;
-  min-height: fit-content;
-  border: 1px solid black;
-  border: 1px solid ${colors.grey};
+  width: 95%;
+  margin: 0 auto;
+  min-height: 80vh;
+  border: 1px solid ${colors.greyLight};
+
   border-radius: ${styles.borderRadius};
   gap: 10px;
   padding-top: 1em;
@@ -94,9 +118,10 @@ const Note = styled.div`
   position: relative;
   margin: 0 1em;
   padding: 0.5em 1em;
+
   box-shadow: ${styles.boxShadow};
   border-radius: ${styles.borderRadius};
-  border: 1px solid grey;
+  border: 1px solid black;
   .title {
     width: 90%;
     font-size: medium;
@@ -160,16 +185,23 @@ const Home = () => {
 
   return (
     <HomeContainer>
-      <SearcContainer>
-        <Search />
-        <input
-          onChange={(e) => {
-            setSearchText(e.target.value);
-          }}
-          type="text"
-          placeholder="Search for title description or tagline..."
-        />
-      </SearcContainer>
+      <HeaderContianer>
+        <Title>
+          <Clipboard />
+          WebKeep
+        </Title>
+        <SearchContainer>
+          <Search />
+          <input
+            onChange={(e) => {
+              setSearchText(e.target.value);
+            }}
+            type="text"
+            placeholder="Search for title description or tagline..."
+          />
+        </SearchContainer>
+      </HeaderContianer>
+
       <NoteContainerWrapper>
         {/* <Title>Notes</Title> */}
         <Link
