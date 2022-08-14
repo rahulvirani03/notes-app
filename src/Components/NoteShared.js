@@ -20,6 +20,7 @@ export const Container = styled.div`
   padding: 1em;
   display: flex;
   gap: 1em;
+  justify-content: space-between;
   flex-direction: column;
   border-radius: ${styles.borderRadius};
   box-shadow: ${styles.boxShadow};
@@ -68,6 +69,7 @@ export const SaveButton = styled.button`
   display: flex;
   cursor: pointer;
   gap: 5px;
+  margin: 0em;
   justify-content: center;
   align-items: center;
   color: white;

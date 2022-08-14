@@ -3,7 +3,6 @@ import {
   collection,
   deleteDoc,
   doc,
-  getDoc,
   getDocs,
   query,
   updateDoc,
@@ -25,7 +24,6 @@ export const addDocument = async (noteData) => {
 export const getAllLDocs = async () => {
   const q = query(collection(db, "notes"));
   const result = await getDocs(q);
-
   const allNotes = [];
   result.forEach((item) => {
     const note = {
@@ -37,11 +35,11 @@ export const getAllLDocs = async () => {
   return allNotes;
 };
 
-export const getSingleDoc = async (id) => {
-  const docRef = doc(db, "notes", id);
-  const result = await getDoc(docRef);
-  return result.data();
-};
+// export const getSingleDoc = async (id) => {
+//   const docRef = doc(db, "notes", id);
+//   const result = await getDoc(docRef);
+//   return result.data();
+// };
 
 export const updateNote = async (note) => {
   const updateDocRef = doc(db, "notes", note.id);

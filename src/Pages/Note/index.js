@@ -117,7 +117,6 @@ const Note = () => {
     }
 
     const res = await handleUpdate();
-    console.log(res);
     if (res.success) {
       navigate("/");
     }
@@ -169,7 +168,6 @@ const Note = () => {
             <Trash2 onClick={handleDelete} stroke={colors.error} />
           </div>
         </IconContainer>
-
         <TitleInput
           onChange={(e) => dispatch({ type: "title", value: e.target.value })}
           placeholder="Title"
