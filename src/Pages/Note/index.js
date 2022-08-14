@@ -1,4 +1,10 @@
-import React, { useCallback, useEffect, useReducer, useState } from "react";
+import React, {
+  useCallback,
+  useEffect,
+  useReducer,
+  useRef,
+  useState,
+} from "react";
 import { ArrowLeft, Bookmark, Trash2 } from "react-feather";
 import { useLocation, useNavigate } from "react-router-dom";
 import styled from "styled-components";
@@ -31,17 +37,29 @@ const Note = () => {
     type: "",
   });
   const [toastMessage, setToastMessage] = useState("");
+  const [isEqual, setIsEqual] = useState(true);
+  const equalRef = useRef(false);
+  const stateRef = useRef(null);
 
   const reducer = (state, action) => {
+    let localState;
     switch (action.type) {
       case "title":
-        return { ...state, title: action.value };
+        localState = { ...state, title: action.value };
+        stateRef.current = localState;
+        return localState;
       case "tagline":
-        return { ...state, tagline: action.value };
+        localState = { ...state, tagline: action.value };
+        stateRef.current = localState;
+        return localState;
       case "description":
-        return { ...state, description: action.value };
+        localState = { ...state, description: action.value };
+        stateRef.current = localState;
+        return localState;
       case "pinned":
-        return { ...state, isPinned: !state.isPinned };
+        localState = { ...state, isPinned: !state.isPinned };
+        stateRef.current = localState;
+        return localState;
       default:
         return state;
     }
@@ -53,6 +71,7 @@ const Note = () => {
     description: data.description,
     id: data.id,
     isPinned: data?.isPinned,
+    time: data.time,
   });
 
   useEffect(() => {
@@ -70,7 +89,20 @@ const Note = () => {
     };
   }, [toast]);
 
+  useEffect(() => {
+    setIsEqual(_.isEqual(state, data));
+  }, [state, data]);
+
+  useEffect(() => {
+    if (!isEqual) {
+      equalRef.current = true;
+    }
+  }, [isEqual]);
+
   const goBack = async () => {
+    if (isEqual) {
+      return navigate("/");
+    }
     if (
       state.title === "" ||
       state.tagline === "" ||
@@ -83,11 +115,7 @@ const Note = () => {
       });
       return;
     }
-    const check = _.isEqual(state, data);
-    if (check) {
-      navigate("/");
-      return;
-    }
+
     const res = await handleUpdate();
     console.log(res);
     if (res.success) {
@@ -95,20 +123,30 @@ const Note = () => {
     }
   };
 
-  const handleUpdate = useCallback(async () => {
-    const res = await updateNote(state);
-    return res;
-  }, [state]);
+  const handleUpdate = useCallback(
+    async (refVal) => {
+      let payload = state;
+      if (refVal !== undefined) payload = refVal;
+      const res = await updateNote(payload);
+      return res;
+    },
+    [state]
+  );
 
   const handleDelete = async () => {
     const res = await deletNote(state.id);
-    console.log(state);
     if (res.success) {
       navigate("/");
     }
   };
 
-  useEffect(() => () => handleUpdate(), [handleUpdate]);
+  useEffect(() => {
+    return () => {
+      if (equalRef.current) {
+        handleUpdate(stateRef.current);
+      }
+    };
+  }, [handleUpdate]);
 
   return (
     <Wrapper>
